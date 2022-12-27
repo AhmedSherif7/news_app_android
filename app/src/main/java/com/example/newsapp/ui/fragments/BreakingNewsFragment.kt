@@ -5,8 +5,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.newsapp.adapters.NewsAdapter
 import com.example.newsapp.databinding.FragmentBreakingNewsBinding
@@ -14,9 +16,10 @@ import com.example.newsapp.ui.NewsActivity
 import com.example.newsapp.ui.NewsViewModel
 import com.example.newsapp.util.Resource
 
-const val TAG = "BREAKING_NEWS_FRAGMENT"
 
 class BreakingNewsFragment : Fragment() {
+
+    private val TAG = "BREAKING_NEWS_FRAGMENT"
 
     private lateinit var viewModel: NewsViewModel
     private lateinit var newsAdapter: NewsAdapter
@@ -35,6 +38,13 @@ class BreakingNewsFragment : Fragment() {
         viewModel = (activity as NewsActivity).viewModel
         setupRecyclerView()
 
+        newsAdapter.setOnItemClickListener {
+            val action =
+                BreakingNewsFragmentDirections.actionBreakingNewsFragmentToArticleFragment(it)
+
+            findNavController().navigate(action)
+        }
+
         viewModel.breakingNews.observe(viewLifecycleOwner) { response ->
             when (response) {
                 is Resource.Loading -> {
@@ -49,7 +59,7 @@ class BreakingNewsFragment : Fragment() {
                 is Resource.Error -> {
                     hideProgressBar()
                     response.message?.let {
-                        Log.e(TAG, "An error occurred $it")
+                        Toast.makeText(activity, "An error occurred: $it", Toast.LENGTH_LONG).show()
                     }
                 }
             }

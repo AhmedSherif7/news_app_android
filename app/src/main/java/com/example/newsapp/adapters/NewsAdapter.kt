@@ -1,5 +1,6 @@
 package com.example.newsapp.adapters
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -46,11 +47,14 @@ class NewsAdapter : RecyclerView.Adapter<NewsAdapter.ArticleViewHolder>() {
                 .into(
                     holder.itemView.findViewById(R.id.ivArticleImage)
                 )
-            holder.itemView.findViewById<TextView>(R.id.tvTitle).text = article.title
-            holder.itemView.findViewById<TextView>(R.id.tvDescription).text = article.description
-            holder.itemView.findViewById<TextView>(R.id.tvPublishedAt).text = article.publishedAt
-            setOnItemClickListener {
+            itemView.findViewById<TextView>(R.id.tvTitle).text = article.title
+            itemView.findViewById<TextView>(R.id.tvDescription).text = article.description
+            itemView.findViewById<TextView>(R.id.tvPublishedAt).text = article.publishedAt
+
+            itemView.setOnClickListener {
                 onItemClickListener?.let {
+                    Log.d("TAG", "111111111111111111111111")
+                    Log.d("TAG", "$article")
                     it(article)
                 }
             }
@@ -63,7 +67,7 @@ class NewsAdapter : RecyclerView.Adapter<NewsAdapter.ArticleViewHolder>() {
 
     private var onItemClickListener: ((Article) -> Unit)? = null
 
-    private fun setOnItemClickListener(listener: (Article) -> Unit) {
+    fun setOnItemClickListener(listener: (Article) -> Unit) {
         onItemClickListener = listener
     }
 }
