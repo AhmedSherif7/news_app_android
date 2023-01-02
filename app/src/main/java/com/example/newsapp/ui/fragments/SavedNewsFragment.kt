@@ -1,7 +1,6 @@
 package com.example.newsapp.ui.fragments
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -35,13 +34,6 @@ class SavedNewsFragment : Fragment() {
         viewModel = (activity as NewsActivity).viewModel
 
         setupRecyclerView()
-
-        newsAdapter.setOnItemClickListener {
-            val action =
-                SavedNewsFragmentDirections.actionSavedNewsFragmentToArticleFragment(it)
-
-            findNavController().navigate(action)
-        }
 
         val itemTouchHelper = object : ItemTouchHelper.SimpleCallback(
             ItemTouchHelper.UP or ItemTouchHelper.DOWN,
@@ -78,7 +70,12 @@ class SavedNewsFragment : Fragment() {
     }
 
     private fun setupRecyclerView() {
-        newsAdapter = NewsAdapter()
+        newsAdapter = NewsAdapter {
+            val action =
+                SavedNewsFragmentDirections.actionSavedNewsFragmentToArticleFragment(it)
+
+            findNavController().navigate(action)
+        }
         binding.rvSavedNews.apply {
             adapter = newsAdapter
             layoutManager = LinearLayoutManager(activity)

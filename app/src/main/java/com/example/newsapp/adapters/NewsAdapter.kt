@@ -1,21 +1,28 @@
 package com.example.newsapp.adapters
 
-import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.newsapp.R
+import com.example.newsapp.databinding.ItemArticlePreviewBinding
 import com.example.newsapp.models.Article
 
-class NewsAdapter : RecyclerView.Adapter<NewsAdapter.ArticleViewHolder>() {
+class NewsAdapter(private val listener: ((Article) -> Unit)? = null) :
+    RecyclerView.Adapter<NewsAdapter.ArticleViewHolder>() {
 
-    inner class ArticleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ArticleViewHolder {
+        return ArticleViewHolder.from(parent)
+    }
 
+    override fun onBindViewHolder(holder: ArticleViewHolder, position: Int) {
+        val article = differ.currentList[position]
+        holder.bind(article, listener)
+    }
+
+    override fun getItemCount(): Int {
+        return differ.currentList.size
     }
 
     private val differCallback = object : DiffUtil.ItemCallback<Article>() {
@@ -30,44 +37,34 @@ class NewsAdapter : RecyclerView.Adapter<NewsAdapter.ArticleViewHolder>() {
 
     val differ = AsyncListDiffer(this, differCallback)
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ArticleViewHolder {
-        return ArticleViewHolder(
-            LayoutInflater.from(parent.context).inflate(
-                R.layout.item_article_preview,
-                parent,
-                false,
+    class ArticleViewHolder private constructor(private val binding: ItemArticlePreviewBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+
+        companion object {
+            fun from(parent: ViewGroup): ArticleViewHolder {
+                val layoutInflater = LayoutInflater.from(parent.context)
+                val binding = ItemArticlePreviewBinding.inflate(layoutInflater, parent, false)
+                return ArticleViewHolder(binding)
+            }
+        }
+
+        fun bind(
+            article: Article,
+            listener: ((Article) -> Unit)? = null,
+        ) {
+            Glide.with(binding.root).load(article.urlToImage).into(
+                binding.ivArticleImage
             )
-        )
-    }
 
-    override fun onBindViewHolder(holder: ArticleViewHolder, position: Int) {
-        val article = differ.currentList[position]
-        holder.apply {
-            Glide.with(this.itemView).load(article.urlToImage)
-                .into(
-                    holder.itemView.findViewById(R.id.ivArticleImage)
-                )
-            itemView.findViewById<TextView>(R.id.tvTitle).text = article.title
-            itemView.findViewById<TextView>(R.id.tvDescription).text = article.description
-            itemView.findViewById<TextView>(R.id.tvPublishedAt).text = article.publishedAt
+            binding.tvTitle.text = article.title
+            binding.tvDescription.text = article.description
+            binding.tvPublishedAt.text = article.publishedAt
 
-            itemView.setOnClickListener {
-                onItemClickListener?.let {
-                    Log.d("TAG", "111111111111111111111111")
-                    Log.d("TAG", "$article")
+            binding.root.setOnClickListener {
+                listener?.let {
                     it(article)
                 }
             }
         }
-    }
-
-    override fun getItemCount(): Int {
-        return differ.currentList.size
-    }
-
-    private var onItemClickListener: ((Article) -> Unit)? = null
-
-    fun setOnItemClickListener(listener: (Article) -> Unit) {
-        onItemClickListener = listener
     }
 }

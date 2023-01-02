@@ -1,7 +1,6 @@
 package com.example.newsapp.ui.fragments
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -38,13 +37,6 @@ class BreakingNewsFragment : Fragment() {
         viewModel = (activity as NewsActivity).viewModel
         setupRecyclerView()
 
-        newsAdapter.setOnItemClickListener {
-            val action =
-                BreakingNewsFragmentDirections.actionBreakingNewsFragmentToArticleFragment(it)
-
-            findNavController().navigate(action)
-        }
-
         viewModel.breakingNews.observe(viewLifecycleOwner) { response ->
             when (response) {
                 is Resource.Loading -> {
@@ -75,7 +67,12 @@ class BreakingNewsFragment : Fragment() {
     }
 
     private fun setupRecyclerView() {
-        newsAdapter = NewsAdapter()
+        newsAdapter = NewsAdapter {
+            val action =
+                BreakingNewsFragmentDirections.actionBreakingNewsFragmentToArticleFragment(it)
+
+            findNavController().navigate(action)
+        }
         binding.rvBreakingNews.apply {
             adapter = newsAdapter
             layoutManager = LinearLayoutManager(activity)

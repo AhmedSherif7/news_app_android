@@ -1,7 +1,6 @@
 package com.example.newsapp.ui.fragments
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,7 +10,6 @@ import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.newsapp.R
 import com.example.newsapp.adapters.NewsAdapter
 import com.example.newsapp.databinding.FragmentSearchNewsBinding
 import com.example.newsapp.ui.NewsActivity
@@ -46,13 +44,6 @@ class SearchNewsFragment : Fragment() {
         setupRecyclerView()
 
         setupSearchListener()
-
-        newsAdapter.setOnItemClickListener {
-            val action =
-                SearchNewsFragmentDirections.actionSearchNewsFragmentToArticleFragment(it)
-
-            findNavController().navigate(action)
-        }
 
         viewModel.searchNews.observe(viewLifecycleOwner) { response ->
             when (response) {
@@ -99,7 +90,12 @@ class SearchNewsFragment : Fragment() {
     }
 
     private fun setupRecyclerView() {
-        newsAdapter = NewsAdapter()
+        newsAdapter = NewsAdapter {
+            val action =
+                SearchNewsFragmentDirections.actionSearchNewsFragmentToArticleFragment(it)
+
+            findNavController().navigate(action)
+        }
         binding.rvSearchNews.apply {
             adapter = newsAdapter
             layoutManager = LinearLayoutManager(activity)
