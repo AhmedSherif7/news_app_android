@@ -5,11 +5,10 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.example.newsapp.databinding.ItemArticlePreviewBinding
 import com.example.newsapp.models.Article
 
-class NewsAdapter(private val listener: ((Article) -> Unit)? = null) :
+class NewsAdapter(private val clickListener: ArticleClickListener? = null) :
     RecyclerView.Adapter<NewsAdapter.ArticleViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ArticleViewHolder {
@@ -18,7 +17,7 @@ class NewsAdapter(private val listener: ((Article) -> Unit)? = null) :
 
     override fun onBindViewHolder(holder: ArticleViewHolder, position: Int) {
         val article = differ.currentList[position]
-        holder.bind(article, listener)
+        holder.bind(article, clickListener)
     }
 
     override fun getItemCount(): Int {
@@ -50,15 +49,17 @@ class NewsAdapter(private val listener: ((Article) -> Unit)? = null) :
 
         fun bind(
             article: Article,
-            listener: ((Article) -> Unit)? = null,
+            clickListener: ArticleClickListener?,
         ) {
             binding.article = article
-
-            binding.root.setOnClickListener {
-                listener?.let {
-                    it(article)
-                }
+            clickListener?.let {
+                binding.clickListener = it
             }
+            binding.executePendingBindings()
         }
     }
+}
+
+class ArticleClickListener(private val clickListener: (article: Article) -> Unit) {
+    fun onClick(article: Article) = clickListener(article)
 }

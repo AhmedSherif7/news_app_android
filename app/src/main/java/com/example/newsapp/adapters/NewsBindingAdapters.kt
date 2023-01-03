@@ -37,8 +37,10 @@ fun TextView.setArticleSource(article: Article?) {
 @BindingAdapter("articleImage")
 fun ImageView.setArticleImage(article: Article?) {
     article?.let {
-        Glide.with(this).load(article.urlToImage).into(
-            this
-        )
+        if (article.urlToImage != null) {
+            Glide.with(this).load(article.urlToImage).into(
+                this
+            )
+        }
     }
 }

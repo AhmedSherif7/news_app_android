@@ -16,6 +16,15 @@ data class Article(
     val publishedAt: String,
     val source: Source,
     val title: String,
-    val url: String,
-    val urlToImage: String
-) : Parcelable
+    val url: String?,
+    val urlToImage: String?
+) : Parcelable {
+
+    override fun hashCode(): Int {
+        var result = id.hashCode()
+        if (url.isNullOrEmpty()) {
+            result = 31 * result + url.hashCode()
+        }
+        return result
+    }
+}

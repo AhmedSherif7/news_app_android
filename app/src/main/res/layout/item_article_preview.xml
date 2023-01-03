@@ -7,11 +7,16 @@
         <variable
             name="article"
             type="com.example.newsapp.models.Article" />
+
+        <variable
+            name="clickListener"
+            type="com.example.newsapp.adapters.ArticleClickListener" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:onClick="@{() -> clickListener.onClick(article)}"
         android:padding="8dp">
 
         <ImageView

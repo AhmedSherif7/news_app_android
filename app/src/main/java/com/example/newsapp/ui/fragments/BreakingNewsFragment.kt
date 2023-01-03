@@ -7,8 +7,10 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.newsapp.adapters.ArticleClickListener
 import com.example.newsapp.adapters.NewsAdapter
 import com.example.newsapp.databinding.FragmentBreakingNewsBinding
 import com.example.newsapp.ui.NewsActivity
@@ -67,12 +69,12 @@ class BreakingNewsFragment : Fragment() {
     }
 
     private fun setupRecyclerView() {
-        newsAdapter = NewsAdapter {
+        newsAdapter = NewsAdapter(ArticleClickListener {
             val action =
                 BreakingNewsFragmentDirections.actionBreakingNewsFragmentToArticleFragment(it)
 
             findNavController().navigate(action)
-        }
+        })
         binding.rvBreakingNews.apply {
             adapter = newsAdapter
             layoutManager = LinearLayoutManager(activity)

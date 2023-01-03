@@ -9,6 +9,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.newsapp.adapters.ArticleClickListener
 import com.example.newsapp.adapters.NewsAdapter
 import com.example.newsapp.databinding.FragmentSavedNewsBinding
 import com.example.newsapp.ui.NewsActivity
@@ -70,12 +71,12 @@ class SavedNewsFragment : Fragment() {
     }
 
     private fun setupRecyclerView() {
-        newsAdapter = NewsAdapter {
+        newsAdapter = NewsAdapter(ArticleClickListener {
             val action =
                 SavedNewsFragmentDirections.actionSavedNewsFragmentToArticleFragment(it)
 
             findNavController().navigate(action)
-        }
+        })
         binding.rvSavedNews.apply {
             adapter = newsAdapter
             layoutManager = LinearLayoutManager(activity)
