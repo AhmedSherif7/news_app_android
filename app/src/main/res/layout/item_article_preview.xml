@@ -4,6 +4,9 @@
 
     <data>
 
+        <variable
+            name="article"
+            type="com.example.newsapp.models.Article" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -13,30 +16,35 @@
 
         <ImageView
             android:id="@+id/ivArticleImage"
+            articleImage="@{article}"
             android:layout_width="160dp"
             android:layout_height="90dp"
+            android:contentDescription="@string/article_image"
             android:scaleType="centerCrop"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/tvSource"
+            articleSource="@{article}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="SOURCE"
+            android:text="@string/source"
             android:textColor="@android:color/white"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/ivArticleImage" />
 
+
         <TextView
             android:id="@+id/tvTitle"
+            articleTitle="@{article}"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:ellipsize="end"
             android:maxLines="3"
-            android:text="TITLE"
+            android:text="@string/title"
             android:textColor="@android:color/white"
             android:textSize="15sp"
             android:textStyle="bold"
@@ -46,13 +54,14 @@
 
         <TextView
             android:id="@+id/tvDescription"
+            articleDescription="@{article}"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
             android:ellipsize="end"
             android:maxLines="5"
-            android:text="DESCRIPTION"
+            android:text="@string/description"
             android:textColor="@android:color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/ivArticleImage"
@@ -60,10 +69,11 @@
 
         <TextView
             android:id="@+id/tvPublishedAt"
+            articlePublishedAt="@{article}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="PUBLISHED AT"
+            android:text="@string/published_at"
             android:textColor="@android:color/white"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvSource" />

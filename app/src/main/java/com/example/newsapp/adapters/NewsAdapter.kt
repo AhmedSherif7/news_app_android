@@ -52,13 +52,7 @@ class NewsAdapter(private val listener: ((Article) -> Unit)? = null) :
             article: Article,
             listener: ((Article) -> Unit)? = null,
         ) {
-            Glide.with(binding.root).load(article.urlToImage).into(
-                binding.ivArticleImage
-            )
-
-            binding.tvTitle.text = article.title
-            binding.tvDescription.text = article.description
-            binding.tvPublishedAt.text = article.publishedAt
+            binding.article = article
 
             binding.root.setOnClickListener {
                 listener?.let {
